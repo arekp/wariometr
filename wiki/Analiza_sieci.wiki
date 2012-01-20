@@ -1,0 +1,13 @@
+#analiza sieci
+
+= Start=
+
+Na początku oczywiście przeszukałem sieć. miałem nadzieje że pomysł mój będzie oryginalny ale jak to zwykle bywa znalazłem podobne projekty. 
+Jednak żadne z nich nie zakładało integracji takiego wariometru z telefonem na androidzie. Wiec może jednak coś nowego się zrobi :)
+
+= Linki, przykłady i wzorce =
+
+Tutaj wszystkie linki jakie udało mi się wygrzebać w sieci :
+  * wariometr na wyświetlaczu z noki [http://www.elektroda.pl/rtvforum/topic1850187.html] 
+  * Opis zastosowania czujnika ciśnienia [http://www.ladyada.net/learn/sensors/bmp085.html]
+  * Biblioteka dla czujnika [https://github.com/adafruit/BMP085-Library]
