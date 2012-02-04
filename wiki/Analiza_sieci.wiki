@@ -11,3 +11,4 @@ Tutaj wszystkie linki jakie udało mi się wygrzebać w sieci :
   * wariometr na wyświetlaczu z noki [http://www.elektroda.pl/rtvforum/topic1850187.html] 
   * Opis zastosowania czujnika ciśnienia [http://www.ladyada.net/learn/sensors/bmp085.html]
   * Biblioteka dla czujnika [https://github.com/adafruit/BMP085-Library]
+  * Wykorzystany kod double to string [http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1207226548]
