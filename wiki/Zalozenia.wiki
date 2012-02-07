@@ -35,3 +35,12 @@ Funkcjonalności oprogramowania na androidzie :
   * Możliwość śledzenia trasy loty na podstawie tras innych pilotów
   * Eksport danych (może jakiś portal, cvs, i co jeszcze przyjdzie do głowy)
   * i co jeszcze będzie potrzebne 
+
+== Kosztorys ==
+
+  * Arduino UNO - 110 PLN
+  * Czujnik ciśnienia BMP085 - 67PLN 
+  * Wyświetlacze LCD 2x13 - 20PLN
+  * Wireless Bluetooth RS232 - 25PLN
+  * Płytka i podzespoły biper, przycisk itd - 30PLN
+
