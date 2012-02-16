@@ -33,14 +33,15 @@ long  cisn;
 double wys;
 double wysBazowa;
 double wysLiczona;
-long cisnBazowe; 
+long cisnBazowe; // cisnienie zapamietane z miejsca startu
+long cisnTmp; // cisnienie do pomiaru predkosci do koreslenia dystansu w danej jednostce czasu
 
 int wyswietlacz = 0; //okresla rodzaj wyswietlanego ekranu
-int czasSerial=200; // jest to czas 0,02s
+int czasSerial=200; // jest to czas 0,2s
 int czasLCD = 500; // jest to czas 0,5s
-// Deklaracja czasu dla serwomechanizmu (aktualny czas + 0,02 s)
+// Deklaracja czasu dla serwomechanizmu (aktualny czas + 0,2 s)
 unsigned long czas_serial = millis() + czasSerial;
-// Deklaracja czasu dla przełączenia diody (aktualny czas + 0,5 s)
+// Deklaracja czasu dla przeĹ‚Ä…czenia diody (aktualny czas + 0,5 s)
 unsigned long czas_lcd = millis() + czasLCD;
 
 void setup() {
@@ -84,7 +85,7 @@ if (wyswietlacz==3){ //opcja liczenia wysokosci i zerowanie wysokosci na podstaw
 
 // Pobranie aktualnego czasu
   unsigned long time = millis();
-  // * Sprawdź czy minęło do wysłania danych 
+  // * SprawdĹş czy minÄ™Ĺ‚o do wysĹ‚ania danych 
  if (time >= czas_serial)
  {
 Serial.print("jestesmy na ekranie: "); Serial.println(wyswietlacz);
@@ -98,12 +99,12 @@ Serial.print("jestesmy na ekranie: "); Serial.println(wyswietlacz);
    // Serial.println(cisnString+cisn);
    czas_serial = millis() + czasSerial;
   }
- // * Sprawdź czy minęło czas do wyswietlenia
+ // * SprawdĹş czy minÄ™Ĺ‚o czas do wyswietlenia
   if (time >= czas_lcd)
   { 
     wysLiczona=wys-wysBazowa;
     Serial.println("wyswietlacz");
-   // wysLiczona=wysBazowa-wys; //obliczmy wysokość wzgledem pozycji początkowej
+     // wysLiczona=wysBazowa-wys; //obliczmy wysokoĹ›Ä‡ wzgledem pozycji poczÄ…tkowej
     displayStatus();
     czas_lcd = millis() + czasLCD;
   }
@@ -158,12 +159,13 @@ void lcd2()
 }
 void lcd3()
 {
-//AAL - ang. Above Aerodrome Level – wysokość nad lotniskiem. Uzyskuje się ją poprzez ustawienie na wysokościomierzu rzeczywistego ciśnienia atmosferycznego na poziomie lotniska (ciśnienie to oznacza się symbolem QFE). Po wylądowaniu wysokościomierz wskaże zero.
+//AAL - ang. Above Aerodrome Level â€“ wysokoĹ›Ä‡ nad lotniskiem. Uzyskuje siÄ™ jÄ… poprzez ustawienie na wysokoĹ›ciomierzu rzeczywistego ciĹ›nienia atmosferycznego na poziomie lotniska (ciĹ›nienie to oznacza siÄ™ symbolem QFE). Po wylÄ…dowaniu wysokoĹ›ciomierz wskaĹĽe zero.
    lcd.home();
    lcd.write("3WCisn ");  lcdPrintDouble(bmp.readAltitude(cisnBazowe),2); lcd.write("V "); 
-   lcdPrintDouble(((bmp.readAltitude(cisnBazowe))/(czasLCD/1000)),2); // (m/s) obliczamy predkosc wznoszenia opadania wysokosc wzgledna / czas z jakiego jest pobrana(wyswietlona na lcd / 1000 bo ma byc w s)
+   lcdPrintDouble(((bmp.readAltitude(cisnTmp))/(czasLCD/1000)),2); // (m/s) obliczamy predkosc wznoszenia opadania wysokosc wzgledna / czas z jakiego jest pobrana(wyswietlona na lcd / 1000 bo ma byc w s)
    lcd.setCursor(0, 1);
    lcd.print("Wysokosc: ");lcd.print(wysLiczona);
+   cisnTmp=cisn;
 }
 
  void lcdPrintDouble( double val, byte precision){
@@ -212,3 +214,4 @@ String wy;
 	  frac = (int(val)- val ) * precision;
     Serial.println(frac,DEC) ;
 }
+
