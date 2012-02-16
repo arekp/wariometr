@@ -33,12 +33,15 @@ long  cisn;
 double wys;
 double wysBazowa;
 double wysLiczona;
-int wyswietlacz = 0; //okresla rodzaj wyswietlanego ekranu
+long cisnBazowe; 
 
+int wyswietlacz = 0; //okresla rodzaj wyswietlanego ekranu
+int czasSerial=200; // jest to czas 0,02s
+int czasLCD = 500; // jest to czas 0,5s
 // Deklaracja czasu dla serwomechanizmu (aktualny czas + 0,02 s)
-unsigned long servo_time = millis() + 200;
+unsigned long czas_serial = millis() + czasSerial;
 // Deklaracja czasu dla przełączenia diody (aktualny czas + 0,5 s)
-unsigned long led_time = millis() + 10000;
+unsigned long czas_lcd = millis() + czasLCD;
 
 void setup() {
   // set up the LCD's number of columns and rows: 
@@ -70,13 +73,19 @@ if (wyswietlacz==1){ //opcja liczenia wysokosci i zerowanie wysokosci
       wysBazowa=wys;
     }
   }
+  
+if (wyswietlacz==3){ //opcja liczenia wysokosci i zerowanie wysokosci na podstawie okreslenia cisnienia 
+    if(digitalRead(buttonPin2) == HIGH){
+      lcd.clear();
+      cisnBazowe=cisn;
+    }
+  }
 
-// wysLiczona=wys-wysBazowa; //obliczmy wysokość wzgledem pozycji początkowej
 
 // Pobranie aktualnego czasu
   unsigned long time = millis();
-  // * Sprawdź czy minęło 0,02 s
- if (time >= servo_time)
+  // * Sprawdź czy minęło do wysłania danych 
+ if (time >= czas_serial)
  {
 Serial.print("jestesmy na ekranie: "); Serial.println(wyswietlacz);
  //  printDouble(temp,2);
@@ -87,16 +96,16 @@ Serial.print("jestesmy na ekranie: "); Serial.println(wyswietlacz);
     //Serial.println(bmp.readPressure());
     //   Serial.println(temp+tem);
    // Serial.println(cisnString+cisn);
-   servo_time = millis() + 200;
+   czas_serial = millis() + czasSerial;
   }
- // * Sprawdź czy minęło 0,5 s
-  if (time >= led_time)
+ // * Sprawdź czy minęło czas do wyswietlenia
+  if (time >= czas_lcd)
   { 
     wysLiczona=wys-wysBazowa;
     Serial.println("wyswietlacz");
    // wysLiczona=wysBazowa-wys; //obliczmy wysokość wzgledem pozycji początkowej
     displayStatus();
-    led_time = millis() + 1000;
+    czas_lcd = millis() + czasLCD;
   }
 
 }
@@ -149,9 +158,10 @@ void lcd2()
 }
 void lcd3()
 {
-
+//AAL - ang. Above Aerodrome Level – wysokość nad lotniskiem. Uzyskuje się ją poprzez ustawienie na wysokościomierzu rzeczywistego ciśnienia atmosferycznego na poziomie lotniska (ciśnienie to oznacza się symbolem QFE). Po wylądowaniu wysokościomierz wskaże zero.
    lcd.home();
-   lcd.write("3T ");  lcdPrintDouble(temp,2); lcd.write(" A ");lcdPrintDouble(wys,2); 
+   lcd.write("3WCisn ");  lcdPrintDouble(bmp.readAltitude(cisnBazowe),2); lcd.write("V "); 
+   lcdPrintDouble(((bmp.readAltitude(cisnBazowe))/(czasLCD/1000)),2); // (m/s) obliczamy predkosc wznoszenia opadania wysokosc wzgledna / czas z jakiego jest pobrana(wyswietlona na lcd / 1000 bo ma byc w s)
    lcd.setCursor(0, 1);
    lcd.print("Wysokosc: ");lcd.print(wysLiczona);
 }
