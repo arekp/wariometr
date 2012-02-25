@@ -1,4 +1,4 @@
-# Podłączenie bluetooth w arduino.
+#summary Podłączenie bluetooth w arduino.
 
 = Podłączenie bluetooth w arduino =
 
