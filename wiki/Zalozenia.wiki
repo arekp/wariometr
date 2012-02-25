@@ -1,3 +1,4 @@
+#summary Założenia dla projektu.
 = Założenia dla projektu =
 
 Tutaj postaram się opisać co ma robić takie cudo, albo inaczej do czego dążę żeby potem móc od siebie tego wymagać :)
