@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#Podłączenie bluetooth w arduino.
 
 = Podłączenie bluetooth w arduino =
 
