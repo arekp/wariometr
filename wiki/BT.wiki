@@ -1,6 +1,6 @@
 #summary One-sentence summary of this page.
 
-= Podłączenie bluetooth arduino =
+= Podłączenie bluetooth w arduino =
 
 Pierwsze testy podłączenia BT powiodły się zestawiłem połączenie z ubuntu :) 
 
