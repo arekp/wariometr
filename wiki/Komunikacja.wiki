@@ -10,7 +10,7 @@ Do komunikacji pomiędzy czujnikiem ciśnienia(adruino) a telefonem wykorzystamy
 
 $wario;temp;cisn;wysok
 
-  * temp - wartość temperatury w *C
+  * temp - wartość temperatury w **C
   * cisn - wartość ciśnienia atmosferycznego w Pa
   * wysok - wartość wysokości obliczona na podstawie biblioteki czujnika przy założeniu ciśnienia odniesienia na poziomie morza 101325 Pa 
 według wzoru
