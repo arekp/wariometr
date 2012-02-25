@@ -10,7 +10,7 @@ i tak cały wariometr będzie składał się :
   * arduiono UNO [http://www.arduino.cc/]
   * Czujnika ciśnienia BMP085
   * Wyświetlacza LCD 2x16
-  * Bluetooth Shield dla Arduino - dopiero w fazie drugiej do komunikacji z androidem
+  * Bluetooth Shield dla Arduino - dopiero w fazie drugiej do komunikacji z androidem - zrezugnowałem z tego na rzecz tańszego Wireless Bluetooth RS232
   * dodatkowo klika przycisków, jakąś diodę, brzęczek, no i pewnie jakiś rezystor
 
 == Software==
@@ -43,4 +43,3 @@ Funkcjonalności oprogramowania na androidzie :
   * Wyświetlacze LCD 2x13 - 20PLN
   * Wireless Bluetooth RS232 - 25PLN
   * Płytka i podzespoły biper, przycisk itd - 30PLN
-
