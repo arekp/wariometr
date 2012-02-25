@@ -1,4 +1,4 @@
-#analiza sieci
+#summary Wszystko co udało się znaleźć w sieci i się przydało.
 
 = Start=
 
