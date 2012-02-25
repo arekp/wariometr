@@ -34,4 +34,10 @@ no i odczytywanie danych
 gtkterm --port /dev/rfcomm0 -s 9600
 }}}
 
+I na koniec czasami przyda sie zwolnienie połaczenia
+
+{{{
+sudo rfcomm release /dev/rfcomm0
+}}}
+
 Jak na razie działa :)
