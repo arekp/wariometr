@@ -2,12 +2,20 @@
 
 = Komunikacja i protokół  =
 
-Add your content here.
+Do komunikacji pomiędzy czujnikiem ciśnienia(adruino) a telefonem wykorzystamy moduł bluetooth. Konieczne było opracowanie protokołu przy pomocy jakiego będziemy przekazywać dane.
 
+*wario* - dla rozpoznania że komunikaty będą pochodziły od naszego urządzenia kazda linia z danymi będzie się zaczynała od wartości wario.
 
-= Details =
+= Szczegóły =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+$wario;temp;cisn;wysok
+
+  * temp - wartość temperatury w *C
+  * cisn - wartość ciśnienia atmosferycznego w Pa
+  * wysok - wartość wysokości obliczona na podstawie biblioteki czujnika przy założeniu ciśnienia odniesienia na poziomie morza 101325 Pa 
+według wzoru
+
+{{{
+altitude = 44330 * (1.0 - pow(pressure /sealevelPressure,0.1903));
+
+}}}
