@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TableLayout
+        android:id="@+id/tableLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|left|center"
+        android:stretchColumns="*" android:layout_margin="5dip" android:shrinkColumns="*">
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Dane Wariometru"
+            android:textAppearance="?android:attr/textAppearanceLarge" android:layout_margin="10dip" android:textColor="#00FF00"/>
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ciśnienie" />
+
+            <TextView
+                android:id="@+id/cisnienie"
+                android:text="0"
+                android:textStyle="bold" android:gravity="center_horizontal"/>
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="Pa" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Temperatura" />
+
+            <TextView
+                android:id="@+id/temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textStyle="bold" android:gravity="center_horizontal"/>
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="*C" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wysokość" />
+
+            <TextView
+                android:id="@+id/wys"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textStyle="bold" android:layout_gravity="center_horizontal" android:gravity="center_horizontal"/>
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="m" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Predkosc pion" />
+
+            <TextView
+                android:id="@+id/predWario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textStyle="bold" android:gravity="center_horizontal"/>
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="m/s" />
+
+        </TableRow>
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Dane GPS"
+            android:textAppearance="?android:attr/textAppearanceLarge" android:layout_margin="10dip" android:textColor="#00FF00"/>
+
+        <TableRow
+            android:id="@+id/tableRow5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lat" />
+
+            <TextView
+                android:id="@+id/latView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:textStyle="bold" android:text="0" android:gravity="center_vertical|center"/>
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Long" />
+
+            <TextView
+                android:id="@+id/longView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:textStyle="bold" android:text="0" android:gravity="center"/>
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Prędkosc poz" />
+
+            <TextView
+                android:id="@+id/predkoscGPS"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:textStyle="bold" android:gravity="center" android:text="0"/>
+
+            <TextView
+                android:id="@+id/textView19"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="km/h" android:layout_gravity="right"/>
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wysokosc" />
+
+            <TextView
+                android:id="@+id/wysokoscGPS"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:textStyle="bold" android:gravity="center" android:text="0"/>
+
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="m" android:layout_gravity="right"/>
+
+        </TableRow>
+
+    </TableLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:layout_marginTop="10dip" android:layout_marginBottom="10dip">
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Wysok: "
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/wysAndro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Brak danych"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="30sp" android:textColor="#FF0000"/>
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" m"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:layout_marginBottom="10dip">
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Prędkosc: "
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/predAndr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Brak Danych"
+            android:textAppearance="?android:attr/textAppearanceLarge" android:textSize="30sp" android:textColor="#FF0000"/>
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="m/s"
+            android:textAppearance="?android:attr/textAppearanceLarge" android:layout_marginLeft="2dip"/>
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@android:drawable/arrow_down_float"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txtview"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="@string/hello"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" >
+
+        <ToggleButton
+            android:id="@+id/lcdoff"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:onClick="LCDOFFView"
+            android:text="LCD" />
+
+        <Button
+            android:id="@+id/btnName"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="wl/wyl LCD" />
+
+        <Button
+            android:id="@+id/zeruj"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Zeruj wys" 
+            android:onClick="zerujWysok"/>
+
+        <Button
+            android:id="@+id/zmienlcd"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Zmien ekran LCD" android:onClick="zmienLCD"/>
+    </LinearLayout>
+
+</LinearLayout>
