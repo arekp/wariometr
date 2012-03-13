@@ -2,7 +2,7 @@
 #include <LiquidCrystal.h>
 #include <Wire.h>
 #include <BMP085.h>
-
+#include <MeetAndroid.h>
 
 
 // Connect VCC of the BMP085 sensor to 3.3V (NOT 5.0V!)
@@ -15,13 +15,14 @@
 // initialize the library with the numbers of the interface pins
 LiquidCrystal lcd(12, 11, 10, 9,8,7);
 BMP085 bmp;
+MeetAndroid meetAndroid;
 
 const int buttonPin = 2; 
 const int buttonPin2 = 3; 
+int lastButtonState = 0;  
+int speakerOut = 6;
+int ledOff = 4;
 
-String tempString="TEMP: ";
-String cisnString="Cisnienie: ";
-String wysString="Wysok: ";
 // these constants won't change.  But you can change the size of
 // your LCD using them:
 const int numRows = 2;
@@ -33,16 +34,20 @@ long  cisn;
 double wys;
 double wysBazowa;
 double wysLiczona;
+double vWysl; //predkosc na podstawie wyliczonych wysokosci
+double vcisn;//predkosc na podstawie cisnienia
 long cisnBazowe; // cisnienie zapamietane z miejsca startu
 long cisnTmp; // cisnienie do pomiaru predkosci do koreslenia dystansu w danej jednostce czasu
 
 int wyswietlacz = 0; //okresla rodzaj wyswietlanego ekranu
 int czasSerial=200; // jest to czas 0,2s
-int czasLCD = 500; // jest to czas 0,5s
+int czasLCD = 500; // jest to czas 1s
+int czasWznoszenia=1000;// to jest 1 sek
 // Deklaracja czasu dla serwomechanizmu (aktualny czas + 0,2 s)
 unsigned long czas_serial = millis() + czasSerial;
 // Deklaracja czasu dla przeĹ‚Ä…czenia diody (aktualny czas + 0,5 s)
 unsigned long czas_lcd = millis() + czasLCD;
+
 
 void setup() {
   // set up the LCD's number of columns and rows: 
@@ -50,23 +55,42 @@ void setup() {
   lcd.write("Wariometr v0.1");
   lcd.setCursor(0, 1);
   lcd.write("Arekp");
+  
   Serial.begin(9600);
   bmp.begin();  
     // initialize the pushbutton pin as an input:
   pinMode(buttonPin, INPUT);     
   pinMode(buttonPin2, INPUT);
+  pinMode(speakerOut, OUTPUT);
+  pinMode(ledOff, OUTPUT);
+  digitalWrite(ledOff, HIGH); // wlaczenie podswetlenia LCD
+  
+  meetAndroid.registerFunction(lcdoff, 'x');
+  meetAndroid.registerFunction(wysF, 'w');
+  meetAndroid.registerFunction(cisnF, 'c');
+  meetAndroid.registerFunction(tempF, 't');
+  meetAndroid.registerFunction(predpF, 'v');
+  meetAndroid.registerFunction(androidLCD, 'Z');
+ meetAndroid.registerFunction(androidWYS, 'Y');  
 }
 
 void loop() {
+  meetAndroid.receive();
+
+  
   temp=bmp.readTemperature();
   cisn=bmp.readPressure();
   wys=bmp.readAltitude();
   
+ // spedW(wys);
+  
+if (digitalRead(buttonPin) != lastButtonState) {  
 if(digitalRead(buttonPin) == HIGH){
-  lcd.clear();
-  wyswietlacz++;
-  if (wyswietlacz==4){wyswietlacz=0;}
+  zmianaLCD();
 }
+}
+lastButtonState = digitalRead(buttonPin);
+  
 
 if (wyswietlacz==1){ //opcja liczenia wysokosci i zerowanie wysokosci
     if(digitalRead(buttonPin2) == HIGH){
@@ -81,34 +105,85 @@ if (wyswietlacz==3){ //opcja liczenia wysokosci i zerowanie wysokosci na podstaw
       cisnBazowe=cisn;
     }
   }
-
-
-// Pobranie aktualnego czasu
+    // Pobranie aktualnego czasu
   unsigned long time = millis();
+  
+ if (time >= czasWznoszenia)
+ {
+   spedW(wys);
+   czasWznoszenia = millis() + czasWznoszenia;
+ }
+  
+
   // * SprawdĹş czy minÄ™Ĺ‚o do wysĹ‚ania danych 
  if (time >= czas_serial)
  {
-Serial.print("jestesmy na ekranie: "); Serial.println(wyswietlacz);
- //  printDouble(temp,2);
-   // Serial.println(bmp.readTemperature());
-    printDouble(wysBazowa,1);
-    printDouble(wys,1);
-     printDouble(wysLiczona,1);
-    //Serial.println(bmp.readPressure());
-    //   Serial.println(temp+tem);
-   // Serial.println(cisnString+cisn);
+meetAndroid.send("test");   
+Serial.print("wario;");   
+Serial.print(bmp.readTemperature());
+ Serial.print(";");
+ Serial.print(bmp.readPressure());
+ Serial.print(";");
+ Serial.print(bmp.readAltitude());
+ Serial.print(";");
+Serial.println(vWysl);
    czas_serial = millis() + czasSerial;
   }
  // * SprawdĹş czy minÄ™Ĺ‚o czas do wyswietlenia
   if (time >= czas_lcd)
   { 
     wysLiczona=wys-wysBazowa;
-    Serial.println("wyswietlacz");
-     // wysLiczona=wysBazowa-wys; //obliczmy wysokoĹ›Ä‡ wzgledem pozycji poczÄ…tkowej
-    displayStatus();
+    displayStatus();  
     czas_lcd = millis() + czasLCD;
   }
 
+}
+
+void lcdoff(byte flag, byte numOfValues)
+{  
+  if (digitalRead(ledOff) == HIGH){
+  digitalWrite(ledOff, LOW); // wylaczenie podswetlenia LCD
+  }else{ 
+    digitalWrite(ledOff, HIGH); // wylaczenie podswetlenia LCD
+  }
+} 
+void wysF(byte flag, byte numOfValues)
+{  
+   meetAndroid.send(bmp.readAltitude());
+}
+void cisnF(byte flag, byte numOfValues)
+{  
+   meetAndroid.send(bmp.readPressure());
+}
+void tempF(byte flag, byte numOfValues)
+{
+ meetAndroid.send(bmp.readTemperature());  
+}
+void predpF(byte flag, byte numOfValues)
+{  
+   meetAndroid.send(vWysl);
+}
+void androidLCD(byte flag, byte numOfValues)
+{  
+   zmianaLCD();
+}
+void androidWYS(byte flag, byte numOfValues)
+{  
+   wysBazowa=wys;
+   cisnBazowe=cisn;
+}
+void zmianaLCD(){
+  lcd.clear();
+  wyswietlacz++;
+  if (wyswietlacz==5){wyswietlacz=0;}
+}
+void spedW(double v1){
+  static long t0;
+  static double v0;
+  long Dt = millis() - t0;
+    vWysl=(v1-v0)/(1);//Przy zalorzeniu ze liczymy co 1 sek
+  v0=v1;
+  t0=millis(); 
 }
 
 void displayStatus(){
@@ -126,6 +201,9 @@ void displayStatus(){
         break;
          case 3:
        lcd3();
+        break;
+         case 4:
+       lcd4();
         break;
       default:
         lcdStart();
@@ -161,12 +239,25 @@ void lcd3()
 {
 //AAL - ang. Above Aerodrome Level â€“ wysokoĹ›Ä‡ nad lotniskiem. Uzyskuje siÄ™ jÄ… poprzez ustawienie na wysokoĹ›ciomierzu rzeczywistego ciĹ›nienia atmosferycznego na poziomie lotniska (ciĹ›nienie to oznacza siÄ™ symbolem QFE). Po wylÄ…dowaniu wysokoĹ›ciomierz wskaĹĽe zero.
    lcd.home();
-   lcd.write("3WCisn ");  lcdPrintDouble(bmp.readAltitude(cisnBazowe),2); lcd.write("V "); 
-   lcdPrintDouble(((bmp.readAltitude(cisnTmp))/(czasLCD/1000)),2); // (m/s) obliczamy predkosc wznoszenia opadania wysokosc wzgledna / czas z jakiego jest pobrana(wyswietlona na lcd / 1000 bo ma byc w s)
+   lcd.write("3WCisn ");  lcdPrintDouble(bmp.readAltitude(cisnBazowe),2); 
    lcd.setCursor(0, 1);
-   lcd.print("Wysokosc: ");lcd.print(wysLiczona);
+   lcd.print("Wm: ");lcd.print(wysLiczona);
+   lcd.write(" V "); 
+   lcdPrintDouble(((bmp.readAltitude(cisn)-bmp.readAltitude(cisnTmp))/(czas_lcd/1000)),2); // (m/s) obliczamy predkosc wznoszenia opadania wysokosc wzgledna / czas z jakiego jest pobrana(wyswietlona na lcd / 1000 bo ma byc w s)
    cisnTmp=cisn;
 }
+void lcd4()
+{
+//AAL - ang. Above Aerodrome Level â€“ wysokoĹ›Ä‡ nad lotniskiem. Uzyskuje siÄ™ jÄ… poprzez ustawienie na wysokoĹ›ciomierzu rzeczywistego ciĹ›nienia atmosferycznego na poziomie lotniska (ciĹ›nienie to oznacza siÄ™ symbolem QFE). Po wylÄ…dowaniu wysokoĹ›ciomierz wskaĹĽe zero.
+   lcd.home();
+   lcd.write("4Vwys ");  lcdPrintDouble(vWysl,2); lcd.write(" m/s");
+   lcd.setCursor(0, 1);
+   lcd.print("Wm: ");lcd.print(wysLiczona);
+   lcd.write(" V "); 
+   lcdPrintDouble(((bmp.readAltitude(cisn)-bmp.readAltitude(cisnTmp))/(czas_lcd/1000)),2); // (m/s) obliczamy predkosc wznoszenia opadania wysokosc wzgledna / czas z jakiego jest pobrana(wyswietlona na lcd / 1000 bo ma byc w s)
+   cisnTmp=cisn;
+}
+
 
  void lcdPrintDouble( double val, byte precision){
   // prints val on a ver 0012 text lcd with number of decimal places determine by precision
