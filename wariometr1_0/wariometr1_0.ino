@@ -34,20 +34,28 @@ long  cisn;
 double wys;
 double wysBazowa;
 double wysLiczona;
+double Vopadania=0.5;//wartosc predokosci opadania aby zaczas sygnalizowac 
+double Vwznoszenia=1;//wartosc wznoszenia aby sygnalizowac.
+double v0; // do oblicznia predkosci 
 double vWysl; //predkosc na podstawie wyliczonych wysokosci
 double vcisn;//predkosc na podstawie cisnienia
 long cisnBazowe; // cisnienie zapamietane z miejsca startu
 long cisnTmp; // cisnienie do pomiaru predkosci do koreslenia dystansu w danej jednostce czasu
 
 int wyswietlacz = 0; //okresla rodzaj wyswietlanego ekranu
-int czasSerial=200; // jest to czas 0,2s
+int czasSerial=500; // jest to czas 0,2s
 int czasLCD = 500; // jest to czas 1s
 int czasWznoszenia=1000;// to jest 1 sek
-// Deklaracja czasu dla serwomechanizmu (aktualny czas + 0,2 s)
-unsigned long czas_serial = millis() + czasSerial;
-// Deklaracja czasu dla przeĹ‚Ä…czenia diody (aktualny czas + 0,5 s)
-unsigned long czas_lcd = millis() + czasLCD;
+int czasDzwieku=10;
 
+int dzwiekOFF=0;//o wyłaczone inne właczone
+
+// Deklaracja czasu dla wysyłania komunikatów przez BT (aktualny czas + 0,2 s)
+unsigned long czas_serial = millis() + czasSerial;
+// Deklaracja czasu dla wyswietlacza diody (aktualny czas + 0,5 s)
+unsigned long czas_lcd = millis() + czasLCD;
+unsigned long czas_Wznoszenia = millis() +czasWznoszenia;
+unsigned long czas_Dzwieku= millis() +czasDzwieku;
 
 void setup() {
   // set up the LCD's number of columns and rows: 
@@ -66,6 +74,7 @@ void setup() {
   digitalWrite(ledOff, HIGH); // wlaczenie podswetlenia LCD
   
   meetAndroid.registerFunction(lcdoff, 'x');
+    meetAndroid.registerFunction(bipoff, 'q');
   meetAndroid.registerFunction(wysF, 'w');
   meetAndroid.registerFunction(cisnF, 'c');
   meetAndroid.registerFunction(tempF, 't');
@@ -76,6 +85,11 @@ void setup() {
 
 void loop() {
   meetAndroid.receive();
+//tone(6, 440);//440
+//delay(100);
+// noTone(6);
+//tone(6, 440);
+//delay(200);
 
   
   temp=bmp.readTemperature();
@@ -88,33 +102,77 @@ if (digitalRead(buttonPin) != lastButtonState) {
 if(digitalRead(buttonPin) == HIGH){
   zmianaLCD();
 }
+//wylaczenie/wlaczenie wyswietlacza
+if(digitalRead(buttonPin) == HIGH and digitalRead(buttonPin2)== HIGH){
+   if (digitalRead(ledOff) == HIGH){
+  digitalWrite(ledOff, LOW); // wylaczenie podswetlenia LCD
+  }else{ 
+    digitalWrite(ledOff, HIGH); // wylaczenie podswetlenia LCD
+  }
 }
+}
+
 lastButtonState = digitalRead(buttonPin);
-  
+
+ if (wyswietlacz==0){ //wlaczenie dzwiku wylaczenie
+    if(digitalRead(buttonPin2) == HIGH){
+       if (dzwiekOFF == 0){
+         dzwiekOFF=1;
+        }else{ 
+          dzwiekOFF=0;
+        }
+    }
+  } 
 
 if (wyswietlacz==1){ //opcja liczenia wysokosci i zerowanie wysokosci
     if(digitalRead(buttonPin2) == HIGH){
       lcd.clear();
       wysBazowa=wys;
+      cisnBazowe=cisn;
     }
   }
   
 if (wyswietlacz==3){ //opcja liczenia wysokosci i zerowanie wysokosci na podstawie okreslenia cisnienia 
     if(digitalRead(buttonPin2) == HIGH){
       lcd.clear();
-      cisnBazowe=cisn;
+     if (dzwiekOFF == 0){
+         dzwiekOFF=1;
+        }else{ 
+          dzwiekOFF=0;
+        }
     }
   }
     // Pobranie aktualnego czasu
   unsigned long time = millis();
   
- if (time >= czasWznoszenia)
- {
-   spedW(wys);
-   czasWznoszenia = millis() + czasWznoszenia;
+ if (time >= czas_Wznoszenia)
+ { //Serial.println("Obliczamy Predkosc");
+   spedW(bmp.readAltitude());// zawsze liczymy co 1s istotne
+   //Serial.println(" Predkosc Obliczona");
+   czas_Wznoszenia = millis() + czasWznoszenia;
  }
-  
-
+ ////////////////////////////////////
+ 
+ if (vWysl >0 and dzwiekOFF==0){
+   //wznoszenie
+   if(vWysl> Vwznoszenia){
+     tone(6,440);
+     czasDzwieku=(vWysl*10)+200; if (czasDzwieku>900) {czasDzwieku=900;}
+   }
+ }
+ if (vWysl < 0 and dzwiekOFF==0){
+   //opadanie
+   if((vWysl*(-1)) > Vopadania){
+   tone(6,3729);
+       czasDzwieku=(vWysl*10*-1)+200; if (czasDzwieku>900) {czasDzwieku=900;}
+   }
+ }
+ if (time >= czas_Dzwieku)
+ {
+   noTone(6);
+   czas_Dzwieku = millis() + czasDzwieku;
+ }
+//////////////////////////////////////
   // * SprawdĹş czy minÄ™Ĺ‚o do wysĹ‚ania danych 
  if (time >= czas_serial)
  {
@@ -126,7 +184,10 @@ Serial.print(bmp.readTemperature());
  Serial.print(";");
  Serial.print(bmp.readAltitude());
  Serial.print(";");
-Serial.println(vWysl);
+ Serial.print(bmp.readAltitude(cisnBazowe));
+ Serial.print(";");
+ Serial.print(vWysl);// wysokosc liczona
+ Serial.println(";");
    czas_serial = millis() + czasSerial;
   }
  // * SprawdĹş czy minÄ™Ĺ‚o czas do wyswietlenia
@@ -146,6 +207,14 @@ void lcdoff(byte flag, byte numOfValues)
   }else{ 
     digitalWrite(ledOff, HIGH); // wylaczenie podswetlenia LCD
   }
+} 
+void bipoff(byte flag, byte numOfValues)
+{  
+  if (dzwiekOFF == 0){
+         dzwiekOFF=1;
+        }else{ 
+          dzwiekOFF=0;
+        }
 } 
 void wysF(byte flag, byte numOfValues)
 {  
@@ -178,12 +247,10 @@ void zmianaLCD(){
   if (wyswietlacz==5){wyswietlacz=0;}
 }
 void spedW(double v1){
-  static long t0;
-  static double v0;
-  long Dt = millis() - t0;
+ // Serial.print("v1: ");Serial.print(v1);Serial.print(" v0 "); Serial.print(v0);  
     vWysl=(v1-v0)/(1);//Przy zalorzeniu ze liczymy co 1 sek
-  v0=v1;
-  t0=millis(); 
+    v0=v1;
+  //  Serial.print("--> V ");Serial.print(vWysl);  
 }
 
 void displayStatus(){
@@ -223,9 +290,9 @@ void lcdWysokosc()
 
    lcd.home();
    //lcd.write("1W:");  lcdPrintDouble(wysBazowa,2);
-   lcd.write("1Wys: ");lcdPrintDouble(wys,1); lcd.write(" m");
+   lcd.write("1Wys C: ");lcdPrintDouble(bmp.readAltitude(cisnBazowe),2); lcd.write(" m");
    lcd.setCursor(0, 1);
-   lcd.print("Wysokosc: ");lcdPrintDouble(wysLiczona,1);lcd.write(" m");
+   lcd.print("Wys: ");lcdPrintDouble(wysLiczona,1);lcd.write(" m");
 }
 void lcd2()
 {
@@ -239,11 +306,11 @@ void lcd3()
 {
 //AAL - ang. Above Aerodrome Level â€“ wysokoĹ›Ä‡ nad lotniskiem. Uzyskuje siÄ™ jÄ… poprzez ustawienie na wysokoĹ›ciomierzu rzeczywistego ciĹ›nienia atmosferycznego na poziomie lotniska (ciĹ›nienie to oznacza siÄ™ symbolem QFE). Po wylÄ…dowaniu wysokoĹ›ciomierz wskaĹĽe zero.
    lcd.home();
-   lcd.write("3WCisn ");  lcdPrintDouble(bmp.readAltitude(cisnBazowe),2); 
+   lcd.write("3Dzwiek off ");  lcdPrintDouble(dzwiekOFF,1);//lcdPrintDouble(bmp.readAltitude(cisnBazowe),2); 
    lcd.setCursor(0, 1);
    lcd.print("Wm: ");lcd.print(wysLiczona);
    lcd.write(" V "); 
-   lcdPrintDouble(((bmp.readAltitude(cisn)-bmp.readAltitude(cisnTmp))/(czas_lcd/1000)),2); // (m/s) obliczamy predkosc wznoszenia opadania wysokosc wzgledna / czas z jakiego jest pobrana(wyswietlona na lcd / 1000 bo ma byc w s)
+   lcdPrintDouble(vWysl,2); // (m/s) obliczamy predkosc wznoszenia opadania wysokosc wzgledna / czas z jakiego jest pobrana(wyswietlona na lcd / 1000 bo ma byc w s)
    cisnTmp=cisn;
 }
 void lcd4()
