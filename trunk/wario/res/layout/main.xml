@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:orientation="vertical" android:isScrollContainer="false">
 
     <TableLayout
         android:id="@+id/tableLayout1"
@@ -88,6 +88,34 @@
 
             <TextView
                 android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="m" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/TableRow01"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/TextView02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wysokość 1" />
+
+            <TextView
+                android:id="@+id/wys1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:text="0"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/TextView03"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -232,7 +260,7 @@
             android:layout_height="wrap_content"
             android:text="Brak danych"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="30sp" android:textColor="#FF0000"/>
+            android:textSize="20sp" android:textColor="#FF0000"/>
 
         <TextView
             android:id="@+id/textView11"
@@ -260,7 +288,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Brak Danych"
-            android:textAppearance="?android:attr/textAppearanceLarge" android:textSize="30sp" android:textColor="#FF0000"/>
+            android:textAppearance="?android:attr/textAppearanceLarge" android:textSize="20sp" android:textColor="#FF0000"/>
 
         <TextView
             android:id="@+id/textView14"
@@ -276,45 +304,44 @@
             android:src="@android:drawable/arrow_down_float"/>
 
     </LinearLayout>
-
+
     <TextView
         android:id="@+id/txtview"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="31dp"
         android:text="@string/hello"
         android:textStyle="bold" />
-
+
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom" >
+        android:layout_height="wrap_content">
 
         <ToggleButton
             android:id="@+id/lcdoff"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:onClick="LCDOFFView"
-            android:text="LCD" />
+            android:text="LCD" android:layout_weight="1" android:textOff="LCD OFF" android:textOn="LCD ON"/>
 
-        <Button
+        <ToggleButton
             android:id="@+id/btnName"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:text="wl/wyl LCD" />
+            android:text="wl/wyl BIP" android:layout_weight="1" android:textOn="BIP ON" android:textOff="BIP OFF"/>
 
         <Button
             android:id="@+id/zeruj"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:text="Zeruj wys" 
-            android:onClick="zerujWysok"/>
+            android:onClick="zerujWysok" android:layout_weight="1"/>
 
         <Button
             android:id="@+id/zmienlcd"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:text="Zmien ekran LCD" android:onClick="zmienLCD"/>
+            android:text="Zmien ekran LCD" android:onClick="zmienLCD" android:layout_weight="1"/>
     </LinearLayout>
 
 </LinearLayout>
