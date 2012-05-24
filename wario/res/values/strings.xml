@@ -3,5 +3,20 @@
 
     <string name="hello">Hello World, WarioActivity!</string>
     <string name="app_name">Wariometr</string>
-
+	<string name="about_msg">Wariometr Wersja 0.1 - jak zadziała to super
+	\n\n\u00A9 2012 by Arkadiusz Ptak
+	\n\nhttp://code.google.com/p/wariometr/
+	
+	\n\nDziękuje projektowi Amarino dzieki kturemu szybciej udało sie połączyć z audrino 
+	\nhttp://code.google.com/p/android-bluetooth/</string>
+	
+	<string name="about_changelog"><b>Modyfikacje i parametry</b>
+	\n0.1
+	\n - Powstanie i szablony.
+	\n0.11
+	\n - Testy pierwsze działania
+	\n\n0.12
+	\n - Dodanie about
+	
+	</string>
 </resources>

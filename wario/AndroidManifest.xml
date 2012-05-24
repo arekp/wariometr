@@ -9,25 +9,42 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <application
         android:icon="@drawable/logo"
-        android:label="@string/app_name" >
-        <activity
-            android:label="@string/app_name"
-            android:name=".WarioActivity" >
-            <intent-filter >
+        android:label="@string/app_name" android:debuggable="true">
+        <uses-library android:name="com.google.android.maps" />
+        <activity android:label="@string/app_name" android:name=".TabActiv" android:configChanges="keyboardHidden|orientation">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:label="@string/app_name"
+            android:name=".WarioActivity" >
+        </activity>
+    
    <activity android:name="at.abraxas.amarino.plugin.InfoActivity" >
       <intent-filter>
           <action android:name="android.intent.action.MAIN" />
           <category android:name="android.intent.category.INFO" />
       </intent-filter>
  </activity>
+   <service android:name="WarioService" android:label="WarioService"></service>
+   <activity android:label="MAPA" android:name=".MapaActivity" android:configChanges="keyboardHidden|orientation">
+                   <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+   </activity>
+   <activity android:label="Screen2" android:name="Scren2Activity" android:configChanges="keyboardHidden|orientation">
+                   <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+   </activity>
+   <activity android:name="MyPreferences"></activity>
     </application>
 
 </manifest>

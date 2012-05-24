@@ -38,6 +38,7 @@ public class WarioActivity extends Activity {
 	private TextView cisnienie;
 	private TextView temperatura;
 	private TextView wysokosc;
+	private TextView wysokosc1;
 	private TextView predkoscWario;
 	private TextView latGPS;
 	private TextView longGPS;
@@ -66,6 +67,7 @@ public class WarioActivity extends Activity {
 		cisnienie = (TextView) findViewById(R.id.cisnienie);
 		temperatura = (TextView) findViewById(R.id.temp);
 		wysokosc = (TextView) findViewById(R.id.wys);
+		wysokosc1 = (TextView) findViewById(R.id.wys1);
 		predkoscWario = (TextView) findViewById(R.id.predWario);
 		wysAndro = (TextView) findViewById(R.id.wysAndro);
 		predAndr = (TextView) findViewById(R.id.predAndr);
@@ -78,12 +80,7 @@ public class WarioActivity extends Activity {
 		
 		btnName.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				LCDOFF();
-
-				// String str = "Hello, " + txtName.getText().toString() + "!";
-				// //
-				// Toast.makeText(getBaseContext(), str,
-				// Toast.LENGTH_LONG).show();
+				BIPOFF();
 			}
 		});
 
@@ -106,10 +103,10 @@ public class WarioActivity extends Activity {
 		Log.d("nawigacja", "pobralismy dan¹" + lm.getAllProviders());
 		locationListener = new MyLocationListener();
 		logi.d("nawigacja", "pobrano dane z GPS");
-		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
+		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 0,
 				locationListener);
 
-		threeDec = new DecimalFormat("0.000");
+		threeDec = new DecimalFormat("0.0");
 	}
 
 	@Override
@@ -128,18 +125,15 @@ public class WarioActivity extends Activity {
 	@Override
 	protected void onStop() {
 		super.onStop();
-
-		// if you connect in onStart() you must not forget to disconnect when
-		// your app is closed
+		if (!WarioService.isServiceAlive()){
 		Amarino.disconnect(this, DEVICE_ADDRESS);
-
-		// do never forget to unregister a registered receiver
 		unregisterReceiver(arduinoReceiver);
+		}
 	}
 
-	private void LCDOFF() {
-		Amarino.sendDataToArduino(this, DEVICE_ADDRESS, 'x', 1);
-		// Amarino.sendDataToArduino(this, DEVICE_ADDRESS, 'w', 1);
+	private void BIPOFF() {
+		Amarino.sendDataToArduino(this, DEVICE_ADDRESS, 'q', 1);
+		// Amarino.sendDataToArduino(this, DEVICE_ ADDRESS,'w', 1);
 		// Amarino.sendDataToArduino(this, DEVICE_ADDRESS, 'c', 1);
 		// Amarino.sendDataToArduino(this, DEVICE_ADDRESS, 't', 1);
 		// Amarino.sendDataToArduino(this, DEVICE_ADDRESS, 'v', 1);
@@ -174,6 +168,7 @@ public class WarioActivity extends Activity {
 				 * loc.getLatitude() + " D³ugoœæ geograficzna: " +
 				 * loc.getLongitude(), Toast.LENGTH_SHORT) .show();
 				 **/
+			
 				latGPS.setText("" + loc.getLatitude());
 				longGPS.setText("" + loc.getLongitude());
 				spedGPS.setText("" + (loc.getSpeed()*3.6));
@@ -242,10 +237,11 @@ public class WarioActivity extends Activity {
 						String[] temp = data.split(";");
 						if (temp[0].equals("wario")) {
 							temperatura.setText(temp[1]);
+							cisnienie.setText(temp[2]);
 							wysokosc.setText(temp[3]);
 							wys = Double.parseDouble(temp[3]);
-							cisnienie.setText(temp[2]);
-							predkoscWario.setText(temp[4]);
+							wysokosc1.setText(temp[4]);
+							predkoscWario.setText(temp[5]);
 						}
 
 						//Log.d("AMARINO_CALOSC", data);

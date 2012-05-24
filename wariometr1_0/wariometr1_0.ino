@@ -43,9 +43,9 @@ long cisnBazowe; // cisnienie zapamietane z miejsca startu
 long cisnTmp; // cisnienie do pomiaru predkosci do koreslenia dystansu w danej jednostce czasu
 
 int wyswietlacz = 0; //okresla rodzaj wyswietlanego ekranu
-int czasSerial=500; // jest to czas 0,2s
-int czasLCD = 500; // jest to czas 1s
-int czasWznoszenia=1000;// to jest 1 sek
+int czasSerial=500; // Czestotliwosc wysyłania komunikatów BT
+int czasLCD = 500; // Czestotliwosc wysyłania danych na ekran LCD
+int czasWznoszenia=2000;// czas pomiaru predkosci wznoszenia
 int czasDzwieku=10;
 
 int dzwiekOFF=0;//o wyłaczone inne właczone
@@ -85,18 +85,10 @@ void setup() {
 
 void loop() {
   meetAndroid.receive();
-//tone(6, 440);//440
-//delay(100);
-// noTone(6);
-//tone(6, 440);
-//delay(200);
 
-  
   temp=bmp.readTemperature();
   cisn=bmp.readPressure();
   wys=bmp.readAltitude();
-  
- // spedW(wys);
   
 if (digitalRead(buttonPin) != lastButtonState) {  
 if(digitalRead(buttonPin) == HIGH){
@@ -236,21 +228,23 @@ void androidLCD(byte flag, byte numOfValues)
 {  
    zmianaLCD();
 }
+//Zerowanie Wysokości 
 void androidWYS(byte flag, byte numOfValues)
 {  
    wysBazowa=wys;
    cisnBazowe=cisn;
 }
+//Zmiana ekrany LCD
 void zmianaLCD(){
   lcd.clear();
   wyswietlacz++;
   if (wyswietlacz==5){wyswietlacz=0;}
 }
+//Pomiar predkosci
 void spedW(double v1){
- // Serial.print("v1: ");Serial.print(v1);Serial.print(" v0 "); Serial.print(v0);  
-    vWysl=(v1-v0)/(1);//Przy zalorzeniu ze liczymy co 1 sek
+ 
+    vWysl=(v1-v0)/(czasWznoszenia/1000);//czasWznoszenia - wielkosc okresu w jakim wyliczamy predkosc dzielone przez 1000 z powodu uzywania z milisek
     v0=v1;
-  //  Serial.print("--> V ");Serial.print(vWysl);  
 }
 
 void displayStatus(){
@@ -310,7 +304,7 @@ void lcd3()
    lcd.setCursor(0, 1);
    lcd.print("Wm: ");lcd.print(wysLiczona);
    lcd.write(" V "); 
-   lcdPrintDouble(vWysl,2); // (m/s) obliczamy predkosc wznoszenia opadania wysokosc wzgledna / czas z jakiego jest pobrana(wyswietlona na lcd / 1000 bo ma byc w s)
+   lcdPrintDouble(vWysl,2); // 
    cisnTmp=cisn;
 }
 void lcd4()
@@ -325,7 +319,7 @@ void lcd4()
    cisnTmp=cisn;
 }
 
-
+//Procedury pobrane z internetu dziekuje ich twurcom za pomoc- nie pamietam żrudła
  void lcdPrintDouble( double val, byte precision){
   // prints val on a ver 0012 text lcd with number of decimal places determine by precision
   // precision is a number from 0 to 6 indicating the desired decimial places
