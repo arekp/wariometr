@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<CheckBoxPreference
+			android:defaultValue="false"
+			android:summary="Wyłączyć LCD na arduino"
+			android:key="lcdOFF"
+			android:title="Wyświetlacz LCD" />
+<PreferenceCategory android:title="Poziomy Sygnałów dzwiękowych">
+		<EditTextPreference
+			android:dialogTitle="Dialog title"
+			android:key="edittextOpadanie"
+			android:summary="Prędkość Opadania"
+			android:positiveButtonText="OK"
+			android:negativeButtonText="Cancel"
+			android:dialogMessage="Wprowadz prekość Opadania"
+			android:title="Prędkośc Opad" />
+		<EditTextPreference
+			android:dialogTitle="Dialog title"
+			android:key="edittextWznoszenie"
+			android:summary="Prędkość Wznoszenia"
+			android:positiveButtonText="OK"
+			android:negativeButtonText="Cancel"
+			android:dialogMessage="Wprowadz prekość Wznoszenia"
+			android:title="Prędkość Wzn" />			
+</PreferenceCategory>	
+    <PreferenceCategory android:title="Second preferences category">
+		<ListPreference
+			android:key="list"
+			android:dialogTitle="Dialog title"
+			android:title="ListPreference"
+			android:entries="@array/list_options"
+			android:entryValues="@array/list_values_options"
+			android:summary="Pole typu ListPreference" />
+	</PreferenceCategory>
+	<PreferenceScreen
+		android:key="prefScreen"
+		android:title="PreferenceScreen"
+		android:summary="Next preference screen">
+		<Preference
+			android:key="preference"
+			android:title="Preference"
+			android:summary="Preference field" />
+	</PreferenceScreen>
+			<Preference
+			android:key="domyslne"
+			android:title="Domyślne"
+			android:summary="Ustawienia domyślne" />
+		<EditTextPreference
+			android:dialogTitle="Ciśnienie Odniesięnia"
+			android:key="cisnieniewzorcowe"
+			android:summary="Ciśnienie na poziomie morza"
+			android:positiveButtonText="OK"
+			android:negativeButtonText="Cancel"
+			android:dialogMessage="Wprowadz ciśnienie na poziomie morza"
+			android:title="Ciśnienie Odniesienia" />
+</PreferenceScreen>
