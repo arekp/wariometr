@@ -2,7 +2,7 @@
 
 = Komunikacja i protokół  =
 
-Do komunikacji pomiędzy czujnikiem ciśnienia(adruino) a telefonem wykorzystamy moduł bluetooth. Konieczne było opracowanie protokołu przy pomocy jakiego będziemy przekazywać dane.
+Do komunikacji pomiędzy czujnikiem ciśnienia(adruino) *BMP085*  a telefonem wykorzystamy moduł bluetooth. Konieczne było opracowanie protokołu przy pomocy jakiego będziemy przekazywać dane.
 
 *wario* - dla rozpoznania że komunikaty będą pochodziły od naszego urządzenia kazda linia z danymi będzie się zaczynała od wartości wario.
 
